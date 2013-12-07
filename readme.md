@@ -27,6 +27,8 @@ var spreadsheet_key = extract(example_spreadsheet_url, {"keys": "key"})
 console.log(spreadsheet_key);
 ```
 
+View [demo](../index.html)
+
 ##Usage
 
 1. Simply include dentist.js in your html.
