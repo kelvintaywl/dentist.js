@@ -1,4 +1,9 @@
 function extract(str_to_split, opts){
+
+	function isURL(str){
+		return str.substring(0,4) === 'http';
+	};
+
 	if(str_to_split === undefined){ return undefined; };
 	opts = opts || {};
 	var URL_DELIM = '?';
@@ -7,7 +12,7 @@ function extract(str_to_split, opts){
 	var keys = (opts.keys === undefined)? null : opts.keys;
 	keys = (opts.keys instanceof String)? [keys] : keys;
 	try {
-		var params_string = (opts.isURL === undefined || opts.isURL)? str_to_split.split(URL_DELIM)[1] : str_to_split;
+		var params_string = (isURL(str_to_split))? str_to_split.split(URL_DELIM)[1] : str_to_split;
 		if(params_string.length<1){ return undefined; };
 		var params = params_string.split(PARAM_DELIM);
 		var results = {};
@@ -17,14 +22,14 @@ function extract(str_to_split, opts){
 			results[key_value[0]] = key_value[1];
 		};
 		if(keys == null){
-			return results;
+			return Object.keys(results).length > 1? results : results[Object.keys(results)[0]];
 		};
 	
 		requested_results = {};
 		for(var i=0; i<keys.length; i++){
 			requested_results[keys[i]] = results[keys[i]] || null;
 		};
-		return ((keys.length>1)? requested_results : requested_results[keys[0]]);
+		return Object.keys(requested_results).length > 1? requested_results : requested_results[keys[0]];
 	}
 	catch (e) {
   	  	return undefined;
