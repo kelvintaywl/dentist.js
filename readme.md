@@ -2,9 +2,12 @@
 
 ##Short Summary
 
-Dentist JS is a Javascript plugin to help front-end developers extract parameters from given URLs.
+Dentist JS is a Javascript snippet to help Javascript developers extract parameters from given URLs.
+View [demo](http://kelvintaywl.pythonanywhere.com/dentistjs) 
+
 
 **Use Cases**
+PROBLEM: Currently, there are no default functions shipped on vanilla Javascript that allows Javascript developers to wrangle GET parameters off the URL.
 
 Many e-commerce stores displays their products with URLs that may specify the item's id in the GET parameters of the URL. Dentist JS can help extract these parameters from the provided URL in one simple call.
 
@@ -27,7 +30,7 @@ var spreadsheet_key = extract(example_spreadsheet_url, {"keys": "key"})
 console.log(spreadsheet_key);
 ```
 
-View [demo](index.html)
+View [demo](http://kelvintaywl.pythonanywhere.com/dentistjs) 
 
 ##Usage
 
@@ -85,7 +88,6 @@ params_from_string = "123"
 
 + param_delim : delimeter separating each parameter. Default value is "&"
 + kv_delim : delimeter seperating the parameter and its value. Default value is "="
-+ isURL : tells Dentist JS if input string is of URL type or otherwise. Default value is true
 
 ```javascript
 var my_cat_string = "id=888||type=lucky||name=luckycat||age=88||lives=9"
