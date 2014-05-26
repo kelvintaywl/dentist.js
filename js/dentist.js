@@ -10,7 +10,9 @@ function extract(str_to_split, opts){
 	var PARAM_DELIM = (opts.param_delim === undefined)? '&': opts.param_delim;
 	var KV_DELIM = (opts.kv_delim === undefined)? '=' : opts.kv_delim;
 	var keys = (opts.keys === undefined)? null : opts.keys;
-	keys = (opts.keys instanceof String)? [keys] : keys;
+	if(keys){
+		keys = (Object.prototype.toString.call(opts.keys) == "[object Array]")? keys : [keys];
+	};
 	try {
 		var params_string = (isURL(str_to_split))? str_to_split.split(URL_DELIM)[1] : str_to_split;
 		if(params_string.length<1){ return undefined; };
