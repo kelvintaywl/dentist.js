@@ -4,7 +4,7 @@ function extract(str_to_split, opts){
 		return str.substring(0,4) === 'http';
 	};
 
-	if(str_to_split === undefined){ return undefined; };
+	str_to_split = (str_to_split === undefined)? document.URL : str_to_split;
 	opts = opts || {};
 	var URL_DELIM = '?';
 	var PARAM_DELIM = (opts.param_delim === undefined)? '&': opts.param_delim;
