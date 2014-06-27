@@ -1,39 +1,41 @@
-function extract(str_to_split, opts){
+!(function(window, document, undefined){
+	window.extract = function extract(str_to_split, opts){
+		var opts = opts || {};
+		var STR = str_to_split || document.URL;
+		var SETTINGS = {
+			start: opts.start && typeof opts.start === 'number'? opts.start : opts.start && typeof opts.start === 'string'? STR.indexOf(opts.start) : STR.indexOf('?') + 1,
+			stop: opts.stop && typeof opts.stop === 'number'? opts.stop : opts.stop && typeof opts.stop === 'string'? STR.indexOf(opts.stop) : STR.length,
+			param_delim : opts.param_delim || '&',
+			kv_delim : opts.kv_delim || '=',
+			keys : (opts.keys && Object.prototype.toString.call(opts.keys) === '[object Array]')? opts.keys : opts.keys? opts.keys : null,
+		};
 
-	function isURL(str){
-		return str.substring(0,4) === 'http';
-	};
+		console.log('keys', SETTINGS.keys);
 
-	str_to_split = (str_to_split === undefined)? document.URL : str_to_split;
-	opts = opts || {};
-	var URL_DELIM = '?';
-	var PARAM_DELIM = (opts.param_delim === undefined)? '&': opts.param_delim;
-	var KV_DELIM = (opts.kv_delim === undefined)? '=' : opts.kv_delim;
-	var keys = (opts.keys === undefined)? null : opts.keys;
-	if(keys){
-		keys = (Object.prototype.toString.call(opts.keys) == "[object Array]")? keys : [keys];
+		try {
+			var results = {};
+			var requested_results = {};
+			var substr = STR.substring(SETTINGS.start, SETTINGS.stop);
+			if(substr.length<1){ return null; };
+			var params = substr.split(SETTINGS.param_delim);
+		
+			for(var i=0; i<params.length; i++){
+				var kv_pair = params[i].split(SETTINGS.kv_delim);
+				results[kv_pair[0]] = kv_pair[1];
+			};
+			if(!SETTINGS.keys){
+				console.log(Object.keys(results).length);
+				return Object.keys(results).length > 1? results : results[Object.keys(results)[0]];
+			};
+			console.log(requested_results);
+			for(var i=0; i< SETTINGS.keys.length; i++){
+				requested_results[SETTINGS.keys[i]] = results[SETTINGS.keys[i]] || null;
+			};
+			console.log(requested_results);
+			return Object.keys(requested_results).length > 1? requested_results : requested_results[keys[0]];
+		}
+		catch (e) {
+	  	  	return;
+		};	
 	};
-	try {
-		var params_string = (isURL(str_to_split))? str_to_split.split(URL_DELIM)[1] : str_to_split;
-		if(params_string.length<1){ return undefined; };
-		var params = params_string.split(PARAM_DELIM);
-		var results = {};
-	
-		for(var i=0; i<params.length; i++){
-			var key_value = params[i].split(KV_DELIM);
-			results[key_value[0]] = key_value[1];
-		};
-		if(keys == null){
-			return Object.keys(results).length > 1? results : results[Object.keys(results)[0]];
-		};
-	
-		requested_results = {};
-		for(var i=0; i<keys.length; i++){
-			requested_results[keys[i]] = results[keys[i]] || null;
-		};
-		return Object.keys(requested_results).length > 1? requested_results : requested_results[keys[0]];
-	}
-	catch (e) {
-  	  	return undefined;
-	};	
-};
+})(window, document);
