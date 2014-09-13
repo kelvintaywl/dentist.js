@@ -1,30 +1,41 @@
 !(function(window, document, undefined){
 	var DEFAULTS = {
 		delimiter: '&',
-		key_value_separator: '=',
-		params_prefix: '?',
+		keyValueSeparator: '=',
+		startAfter: '?',
 	};
 
 	String.prototype.extract = function(opts){
+
+		function filterInt(value) {
+  			if(/^(\-|\+)?([0-9]+|Infinity)$/.test(value)){
+    			return Number(value);
+    		};
+  			return NaN;
+		}
+
+		var delimiter, keyValueSeparator, startAfter, limit = undefined;
 		var opts = opts || {},
 			keyValuePairs = [],
 			params = {};
 
-		opts.delimiter = opts.delimiter || DEFAULTS.delimiter;
-		opts.key_value_separator = opts.key_value_separator || DEFAULTS.key_value_separator;
-		opts.params_prefix = opts.params_prefix || DEFAULTS.params_prefix;
+		delimiter = opts.delimiter || DEFAULTS.delimiter;
+		keyValueSeparator = opts.keyValueSeparator || DEFAULTS.keyValueSeparator;
+		startAfter = opts.startAfter || DEFAULTS.startAfter;
+		limit = filterInt(opts.limit)? opts.limit : undefined;
 
-		var indexParamsPrefix = this.indexOf(opts.params_prefix)
+		var startAfterindex = this.indexOf(startAfter);
 
 		// scope of finding params only applicable to str
-		var str = indexParamsPrefix < 0? this : this.substring(indexParamsPrefix+1); 
+		var str = startAfterindex < 0? this : this.substring(startAfterindex + 1); 
 		
-		keyValuePairs = str.split(opts.delimiter);
-		var kv_pair;
+		keyValuePairs = str.split(delimiter, limit);
+		var kvPair;
 		for(var i=0, s=keyValuePairs.length; i<s; i++){
-			kv_pair = keyValuePairs[i].split(opts.key_value_separator);
-			// ignore any items after first value found, where key = kv_pair[0], value = kv_pair[1]
-			params[kv_pair[0]] = kv_pair[1];
+			kvPair = keyValuePairs[i].split(keyValueSeparator, 2);
+			// ignore any items after first value found, where key = kvPair[0], value = kvPair[1]
+			var value = kvPair[1];
+			params[kvPair[0]] = filterInt(value)? filterInt(value) : value; // return int if value is parsable
 		};
 		return params;
 	};
