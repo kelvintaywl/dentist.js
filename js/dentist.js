@@ -1,4 +1,4 @@
-!(function(window, document, undefined){
+!(function(){
 	var DEFAULTS = {
 		delimiter: '&',
 		keyValueSeparator: '=',
@@ -14,6 +14,8 @@
   			return NaN;
 		}
 
+		if(this.length <= 1) return;
+
 		var delimiter, keyValueSeparator, startAfter, limit = undefined;
 		var opts = opts || {},
 			keyValuePairs = [],
@@ -25,6 +27,9 @@
 		limit = filterInt(opts.limit)? opts.limit : undefined;
 
 		var startAfterindex = this.indexOf(startAfter);
+		var keyValueSeparatorFirstIndex = this.indexOf(keyValueSeparator); 
+
+		if(keyValueSeparatorFirstIndex < 0) return;
 
 		// scope of finding params only applicable to str
 		var str = startAfterindex < 0? this : this.substring(startAfterindex + 1); 
@@ -39,4 +44,4 @@
 		};
 		return params;
 	};
-})(window, document);
+})();
