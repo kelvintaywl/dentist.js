@@ -1,105 +1,83 @@
 # Dentist JS
 
-##Short Summary
+##TL;DR
 
-Dentist JS is a Javascript snippet to help Javascript developers extract parameters from given URLs.
-View [demo](http://kelvintaywl.pythonanywhere.com/dentistjs) 
+Working with URLs or jQuery's serialize() method? Call on Dentist JS to extract those parameters!
+Dentist JS extracts anything as long as they are strings!
 
-
-**Use Cases**
-PROBLEM: Currently, there are no default functions shipped on vanilla Javascript that allows Javascript developers to wrangle GET parameters off the URL.
-
-Many e-commerce stores displays their products with URLs that may specify the item's id in the GET parameters of the URL. Dentist JS can help extract these parameters from the provided URL in one simple call.
-
-Need to pull out that Spreadsheet key from a particular Google Spreadsheet? Dentist JS is here to extract that!
-
-Example:
+EXAMPLE:
 
 ```javascript
-var input_string = document.getElementById('inputURL');
-//returns an object of the parameters in key value format
-var params_from_string = extract(input_string);
-alert(JSON.stringify(params_from_string));
+// document.URL == "http://helloworld.com/quotes?id=1337&author=kelvin&message=hello"
+var currentURL = document.URL;
+var params = currentURL.extract();
+console.log(params.id); // 1337
+console.log(params.author) // "kelvin"
+console.log(params.message) // "hello"
 ```
+Dentist JS is smart enough to know when to return a string or integer instead too!
+
+## WHY
+Often, we have systems that require the user to enter url addresses. These scenarios include (inexhaustive):
+
+- reporting current page's URL address to error-reporting functions or systems
+- entering current URL of Google spreadsheet to system (for system to parse data in these spreadsheets)
+
+Usually, these URLs include parameters that can be valuable or essential for the developer. Sadly, Javascript does not come with a method that allows us to pull out these parameters. 
+
+Also, instead of using jQuery's seralizeArray() (when dealing with AJAX and forms), we can now use Dentist JS to get to those parameters more efficiently ( O(1), rather than O(n))
+
+### HOW
+
+Example, a form (id: form) contains two inputs : {name: 'username', value; "nyancat"} and {name: 'password', value: "nyannyan"}
 
 ```javascript
-var example_spreadsheet_url = "https://docs.google.com/spreadsheet/ccc?key=0AmOWBO7jUkaFdEwxdlpmVl9Bcm5faGVFNTVTdUV6Wnc&usp=drive_web#gid=0";
-var spreadsheet_key = extract(example_spreadsheet_url, {"keys": "key"})
-
-//prints out 0AmOWBO7jUkaFdEwxdlpmVl9Bcm5faGVFNTVTdUV6Wnc
-console.log(spreadsheet_key);
+$('#form').submit(function(e){
+	e.preventDefault();
+	var s = $(this).serialize(); // "username=nyancat&password=nyannyan"
+	$(this).serializeArray(); // [{name: 'username', value; "nyancat"}, {name: 'password', value: "nyannyan"}]
+	var formParams = s.extract() // {username: 'nyancat', password: 'nyannyan'}
+	formParams.username; // 'nyancat'
+	formParams.password; // 'nyannyan'
+});
 ```
 
-View [demo](http://kelvintaywl.pythonanywhere.com/dentistjs) 
 
-##Usage
+## API Usage
 
-1. Simply include dentist.js in your html.
+Dentist JS allows the following options when extracting.
 
-```html
-<script src="YOUR_JAVASCRIPT_FOLDER_PATH/dentist.js"></script>
-```
+| name | description | default |
+| ---- | ---- | ---- |
+| delimiter | char or string which separates each parameter | '&' |
+| keyValueSeparator | char or string which connects the key and value in each parameter | '=' |
+| startAfter | tells Dentist JS to only consider extract after the first occurance of this char or string | '?' |
+| limit | an integer N, where Dentist JS only returns the first N parameters it can find | Infinity |
 
-2. In your custom javascript, call the extract() on the input url string.
+Examples:
 
 ```javascript
-var input_string = "http://some_random_url.com/some_path?id=123&type=mytype&name=myname";
-var params_from_string = extract(input_string);
+var str = "helloworld>a-1|b-2|c-3";
+var params = str.extract({startAfter: ">", delimiter: '|', keyValueSeparator: '-', limit: 2});
+params.a; // 1
+params.b; // 2
+params.c; // undefined since limit at 2
 ```
 
-Returned object:
-```javascript
-params_from_string = {
-	"id": "123",
-	"type": "mytype",
-	"name": "myname"
-}
-```
+More usage examples can be found under ```tests/test.coffee```
 
-By default, extract() returns all available parameters from the input unless specified. To specify particular keys needed (eg., "id" and "name"), just add in the arguments as an "keys" array (shown below).
+### Dentist JS uses:
 
-```javascript
-var input_string = "http://some_random_url.com/some_path?id=123&type=mytype&name=myname";
-var params_from_string = extract(input_string, {"keys":["id", "name"]});
-```
+- node
+- grunt
+- mocha js
+- grunt-contrib-uglify
 
-Returned object:
-```javascript
-params_from_string = {
-	"id": "123",
-	"name": "myname"
-}
-```
 
-3. Because we may only require one parameter from the input string, Dentist JS is smart enough to return you a string instead of one object! Try it!
 
-```javascript
-var input_string = "http://some_random_url.com/some_path?id=123&type=mytype&name=myname"
-var params_from_string = extract(input_string, {"keys":"id"});
-// same as writing -> var params_from_string = extract(input_string, {"keys":["id"]});
-```
 
-Returned object:
-```javascript
-params_from_string = "123"
-```
 
-4. Dentist JS can also be customized! Available options include:
 
-+ param_delim : delimeter separating each parameter. Default value is "&"
-+ kv_delim : delimeter seperating the parameter and its value. Default value is "="
 
-```javascript
-var my_cat_string = "id=888||type=lucky||name=luckycat||age=88||lives=9"
-var about_my_cat_ = extract(my_cat_string, {"keys":["id", "lives", "age"], "param_delim": "||", isURL: false});
-```
 
-Returned object:
-```javascript
-about_my_cat = {
-	"id": "888",
-	"lives": "9",
-	"age": "88"
-}
-```
 
