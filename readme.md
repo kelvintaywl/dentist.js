@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kelvintaywl/dentist.js.svg?branch=master)](https://travis-ci.org/kelvintaywl/dentist.js)
+
 # Dentist JS
 
 ##TL;DR
