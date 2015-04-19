@@ -14,7 +14,7 @@
 
 ##TL;DR
 
-Working with URLs or jQuery's serialize() method? Call on Dentist JS to extract those parameters!
+Working with URLs or jQuery's serialize() method? Need to extract those parameters from the querystring itself? Call a Dentist!
 Dentist JS extracts anything as long as they are strings!
 
 EXAMPLE:
