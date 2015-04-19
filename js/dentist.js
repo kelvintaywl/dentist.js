@@ -1,4 +1,6 @@
 !(function(){
+	var undefined;
+
 	var DEFAULTS = {
 		delimiter: '&',
 		keyValueSeparator: '=',
@@ -16,7 +18,7 @@
 
 		if(this.length <= 1) return;
 
-		var delimiter, keyValueSeparator, startAfter, limit = undefined;
+		var delimiter, keyValueSeparator, startAfter, limit;
 		var opts = opts || {},
 			keyValuePairs = [],
 			params = {};
