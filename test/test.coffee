@@ -31,7 +31,7 @@ describe 'Dentist JS', () ->
 
 			params = "a-1|b-2|z-zebra".extract({delimiter: "|", keyValueSeparator: "-", startAfter: "|"})
 			assert.equal undefined, params.a
-			assert.equal 2, params.b
+			assert.equal undefined, params.b
 			assert.equal "zebra", params.z
 
 		it 'should return undefined if string does not contain parameters.', () ->

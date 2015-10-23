@@ -10,35 +10,31 @@
 	String.prototype.extract = function(opts){
 
 		function filterInt(value) {
-  			if(/^(\-|\+)?([0-9]+|Infinity)$/.test(value)){
-    			return Number(value);
-    		};
-  			return NaN;
+  			return (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))? Number(value) : NaN;
 		}
 
-		if(this.length <= 1) return;
+		if (this.length <= 1) return;
 
-		var delimiter, keyValueSeparator, startAfter, limit;
 		var opts = opts || {},
 			keyValuePairs = [],
 			params = {};
 
-		delimiter = opts.delimiter || DEFAULTS.delimiter;
-		keyValueSeparator = opts.keyValueSeparator || DEFAULTS.keyValueSeparator;
-		startAfter = opts.startAfter || DEFAULTS.startAfter;
-		limit = filterInt(opts.limit)? opts.limit : undefined;
+		var delimiter = opts.delimiter || DEFAULTS.delimiter;
+		var keyValueSeparator = opts.keyValueSeparator || DEFAULTS.keyValueSeparator;
+		var startAfter = opts.startAfter || DEFAULTS.startAfter;
+		var limit = filterInt(opts.limit) >= 1? opts.limit : undefined;
 
-		var startAfterindex = this.indexOf(startAfter);
-		var keyValueSeparatorFirstIndex = this.indexOf(keyValueSeparator); 
+		var querystringStartIndex = this.lastIndexOf(startAfter) + 1;
+		var keyValueSeparatorFirstIndex = this.indexOf(keyValueSeparator, querystringStartIndex); 
 
-		if(keyValueSeparatorFirstIndex < 0) return;
+		if (keyValueSeparatorFirstIndex < 0) return;
 
 		// scope of finding params only applicable to str
-		var str = startAfterindex < 0? this : this.substring(startAfterindex + 1); 
+		var str = querystringStartIndex < 0? new String(this) : this.substring(querystringStartIndex); 
 		
 		keyValuePairs = str.split(delimiter, limit);
-		var kvPair;
-		for(var i=0, s=keyValuePairs.length; i<s; i++){
+		var kvPair, i = 0;
+		for(s=keyValuePairs.length; i<s; i++){
 			kvPair = keyValuePairs[i].split(keyValueSeparator, 2);
 			// ignore any items after first value found, where key = kvPair[0], value = kvPair[1]
 			var value = kvPair[1];
