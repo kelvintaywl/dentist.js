@@ -41,6 +41,10 @@ Also, instead of using jQuery's seralizeArray() (when dealing with AJAX and form
 
 ### HOW
 
+You can install Dentist.js via Bower:
+
+`bower install dentistjs`
+
 Example, a form (id: form) contains two inputs : {name: 'username', value; "nyancat"} and {name: 'password', value: "nyannyan"}
 
 ```javascript
