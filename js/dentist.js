@@ -34,7 +34,7 @@
 		
 		keyValuePairs = str.split(delimiter, limit);
 		var kvPair, i = 0;
-		for(s=keyValuePairs.length; i<s; i++){
+		for(var s = keyValuePairs.length; i < s; i++){
 			kvPair = keyValuePairs[i].split(keyValueSeparator, 2);
 			// ignore any items after first value found, where key = kvPair[0], value = kvPair[1]
 			var value = kvPair[1];
