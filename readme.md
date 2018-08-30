@@ -21,8 +21,11 @@ EXAMPLE:
 
 ```javascript
 // document.URL == "http://helloworld.com/quotes?id=1337&author=kelvin&message=hello"
-var currentURL = document.URL;
-var params = currentURL.extract();
+
+const extract = require('dentist');
+
+
+const params = extract(document.URL);
 console.log(params.id); // 1337
 console.log(params.author) // "kelvin"
 console.log(params.message) // "hello"
@@ -41,22 +44,9 @@ Also, instead of using jQuery's seralizeArray() (when dealing with AJAX and form
 
 ### HOW
 
-You can install Dentist.js via Bower:
+You can install Dentist.js via NPM:
 
-`bower install dentistjs`
-
-Example, a form (id: form) contains two inputs : {name: 'username', value; "nyancat"} and {name: 'password', value: "nyannyan"}
-
-```javascript
-$('#form').submit(function(e){
-	e.preventDefault();
-	var s = $(this).serialize(); // "username=nyancat&password=nyannyan"
-	$(this).serializeArray(); // [{name: 'username', value; "nyancat"}, {name: 'password', value: "nyannyan"}]
-	var formParams = s.extract() // {username: 'nyancat', password: 'nyannyan'}
-	formParams.username; // 'nyancat'
-	formParams.password; // 'nyannyan'
-});
-```
+`npm install dentist`
 
 
 ## API Usage
@@ -73,27 +63,13 @@ Dentist JS allows the following options when extracting.
 Examples:
 
 ```javascript
-var str = "helloworld>a-1|b-2|c-3";
-var params = str.extract({startAfter: ">", delimiter: '|', keyValueSeparator: '-', limit: 2});
+const extract = require('dentist');
+
+const str = "helloworld>a-1|b-2|c-3";
+const params = extract(str, {startAfter: ">", delimiter: '|', keyValueSeparator: '-', limit: 2});
 params.a; // 1
 params.b; // 2
 params.c; // undefined since limit at 2
 ```
 
-More usage examples can be found under ```tests/test.coffee```
-
-### Dentist JS uses:
-
-- node
-- grunt
-- mocha js
-- grunt-contrib-uglify
-
-
-
-
-
-
-
-
-
+More usage examples can be found under [tests](test)

@@ -1,0 +1,15 @@
+{
+  "env": {
+    "node" : true,
+    "jest/globals": true
+  },
+  "rules": {
+    "jest/no-disabled-tests": "error",
+    "jest/no-focused-tests": "error"
+  },
+  "extends": "airbnb-base",
+  "plugins": [
+    "import",
+    "jest"
+  ]
+}
