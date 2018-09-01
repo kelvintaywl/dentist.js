@@ -22,7 +22,7 @@ EXAMPLE:
 ```javascript
 // document.URL == "http://helloworld.com/quotes?id=1337&author=kelvin&message=hello"
 
-const extract = require('dentist');
+const { extract } = require('dentist');
 
 
 const params = extract(document.URL);
@@ -63,7 +63,7 @@ Dentist JS allows the following options when extracting.
 Examples:
 
 ```javascript
-const extract = require('dentist');
+const { extract } = require('dentist');
 
 const str = "helloworld>a-1|b-2|c-3";
 const params = extract(str, {startAfter: ">", delimiter: '|', keyValueSeparator: '-', limit: 2});

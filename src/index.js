@@ -12,7 +12,7 @@ const extract = (str, options) => {
     return NaN;
   };
 
-  if (str.length <= 1) return {};
+  if (str.length <= 1) return undefined;
 
   const opts = options || {};
   let keyValuePairs = [];
@@ -26,7 +26,7 @@ const extract = (str, options) => {
   const querystringStartIndex = str.lastIndexOf(startAfter) + 1;
   const keyValueSeparatorFirstIndex = str.indexOf(keyValueSeparator, querystringStartIndex);
 
-  if (keyValueSeparatorFirstIndex < 0) return {};
+  if (keyValueSeparatorFirstIndex < 0) return undefined;
 
   // scope of finding params only applicable to str
   const mystr = querystringStartIndex < 0 ? str : str.substring(querystringStartIndex);
@@ -44,4 +44,4 @@ const extract = (str, options) => {
   return params;
 };
 
-module.exports = extract;
+module.exports = { extract };
